@@ -7,7 +7,7 @@ response = requests.post(url)
 print(response.text)
 
 print("--Point 2---")
-response = requests.head(url, params={"method": "HEAD"})
+response = requests.head(url, data={"method": "HEAD"})
 print(response.text)
 
 print("--Point 3---")
@@ -18,13 +18,12 @@ print("--Point 4---")
 methodType = ["POST", "GET", "PUT", "DELETE"]
 for rm in methodType:
     print(f"Check {rm} method")
-    if rm == "GET":
-        for mt in methodType:
+    for mt in methodType:
+        if rm == "GET":
             resp = requests.request(rm, url, params={"method": mt})
-            if rm ==mt and resp.text == "Wrong method provided":
-                print(f"Request type={rm}, param={mt}, response={resp.text}, This is wrong case")
-    else:
-        for mt in methodType:
+            print(f"Request type={rm}, param={mt}, response={resp.text}")
+        else:
             resp = requests.request(rm, url, data={"method": mt})
-            if rm ==mt and resp.text == "Wrong method provided":
-                print(f"Request type={rm}, param={mt}, response={resp.text}, This is wrong case")
+            print(f"Request type={rm}, param={mt}, response={resp.text}")
+        if rm ==mt and resp.text == "Wrong method provided":
+            print(f"Request type={rm}, param={mt}, response={resp.text}, This is wrong case")
