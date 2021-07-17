@@ -1,6 +1,8 @@
 from requests import Response
 import json.decoder
 from datetime import datetime
+from lib.my_requests import MyRequests
+import allure
 
 class BaseCase:
     def get_cookie(self, response: Response, cookie_name):
@@ -21,6 +23,7 @@ class BaseCase:
         assert name in response_as_dict, f"Response JSON doesn't have key {name}."
         return response_as_dict[name]
 
+    @allure.step("Generate registration data for new user")
     def prepare_registration_data(self, email=None):
         if email is None:
             base_part = 'learnqa'
@@ -34,4 +37,11 @@ class BaseCase:
             'lastName': 'learnqa',
             'email': email
         }
+
+    @allure.step("Create new user")
+    def create_user(self):
+        user_data = self.prepare_registration_data()
+        response = MyRequests.post("/user", data=user_data)
+        return self.get_json_value(response, "id"), user_data
+
 

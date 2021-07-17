@@ -2,8 +2,11 @@ import requests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 import pytest
+from lib.my_requests import MyRequests
+import allure
 
 
+@allure.epic("Registrations cases")
 class TestUserRegister(BaseCase):
 
     accounts = [
@@ -37,7 +40,7 @@ class TestUserRegister(BaseCase):
 
     @pytest.mark.parametrize("accounts", accounts)
     def test_create_invalid_user(self, accounts):
-        response = requests.post('https://playground.learnqa.ru/api/user/', data=accounts[0])
+        response = MyRequests.post('/user/', data=accounts[0])
         Assertions.assert_code_status(response, 400)
         print(response.text)
         Assertions.assert_response_text(response, accounts[1])
